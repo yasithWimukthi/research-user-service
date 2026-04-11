@@ -7,15 +7,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
 
-    public String getUser(String id) {
+    public String getUser(String id, String failure) {
 
         long start = System.currentTimeMillis();
 
-        log.info("event=request_received userId={}", id);
+        log.info("event=request_received userId={} failure={}", id, failure);
 
-        simulateLatency();
-
-        log.info("event=db_call_completed");
+        simulateFailure(failure);
 
         long latency = System.currentTimeMillis() - start;
 
@@ -24,9 +22,24 @@ public class UserService {
         return "user-" + id;
     }
 
-    private void simulateLatency() {
+    private void simulateFailure(String failure) {
+
         try {
-            Thread.sleep(100);
+
+            if ("latency".equalsIgnoreCase(failure)) {
+                Thread.sleep(2000);
+            } else if ("error".equalsIgnoreCase(failure)) {
+                throw new RuntimeException("Simulated failure");
+            } else if ("cpu".equalsIgnoreCase(failure)) {
+                long end = System.currentTimeMillis() + 2000;
+
+                while (System.currentTimeMillis() < end) {
+                    Math.sqrt(Math.random());
+                }
+            } else {
+                Thread.sleep(100); // normal
+            }
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
