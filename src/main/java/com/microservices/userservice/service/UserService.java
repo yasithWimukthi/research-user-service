@@ -7,31 +7,48 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
 
-    public String getUser(String id, String failure) {
+    public String getUser(String id, String failure, int duration) {
 
         long start = System.currentTimeMillis();
 
-        log.info("event=request_received userId={} failure={}", id, failure);
+        log.info("event=request_received userId={}", id);
 
-        simulateFailure(failure);
+        try {
+
+            log.info("event=db_call_start");
+
+            simulateFailure(failure,  duration);
+
+            log.info("event=db_call_end");
+
+        } catch (Exception e) {
+
+            log.error("event=exception message={}", e.getMessage());
+
+            throw e;
+        }
 
         long latency = System.currentTimeMillis() - start;
+
+        if(latency > 1000){
+            log.warn("event=slow_response latency={}", latency);
+        }
 
         log.info("event=response_sent latency={}", latency);
 
         return "user-" + id;
     }
 
-    private void simulateFailure(String failure) {
+    private void simulateFailure(String failure , int duration) {
 
         try {
 
             if ("latency".equalsIgnoreCase(failure)) {
-                Thread.sleep(2000);
+                Thread.sleep(duration); // simulate latency
             } else if ("error".equalsIgnoreCase(failure)) {
                 throw new RuntimeException("Simulated failure");
             } else if ("cpu".equalsIgnoreCase(failure)) {
-                long end = System.currentTimeMillis() + 2000;
+                long end = System.currentTimeMillis() + duration;
 
                 while (System.currentTimeMillis() < end) {
                     Math.sqrt(Math.random());
