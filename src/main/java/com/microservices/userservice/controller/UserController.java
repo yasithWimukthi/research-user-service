@@ -15,8 +15,9 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<String> getUser(
             @PathVariable String id,
-            @RequestParam(required = false) String failure
+            @RequestParam(required = false) String failure,
+            @RequestParam(required = false, defaultValue = "100") int duration
     ) {
-        return ResponseEntity.ok(userService.getUser(id, failure));
+        return ResponseEntity.ok(userService.getUser(id, failure, duration));
     }
 }
