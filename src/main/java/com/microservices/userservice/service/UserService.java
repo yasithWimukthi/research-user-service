@@ -9,21 +9,17 @@ public class UserService {
 
     public String getUser(String id) {
 
-        log.info("service=user-service event=request_received userId={}", id);
-
         long start = System.currentTimeMillis();
 
-        log.info("service=user-service event=db_call_start");
+        log.info("event=request_received userId={}", id);
 
         simulateLatency();
 
-        log.info("service=user-service event=db_call_end");
-
-        log.info("service=user-service event=processing");
+        log.info("event=db_call_completed");
 
         long latency = System.currentTimeMillis() - start;
 
-        log.info("service=user-service event=response_sent latency={}ms", latency);
+        log.info("event=response_sent latency={}", latency);
 
         return "user-" + id;
     }
