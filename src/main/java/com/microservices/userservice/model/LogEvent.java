@@ -16,4 +16,5 @@ public class LogEvent {
     private String requestId;
     private Long latency;
     private String errorMessage;
+
 }
