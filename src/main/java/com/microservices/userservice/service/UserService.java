@@ -175,7 +175,7 @@ public class UserService {
                 sendLogEvent(new LogEvent(
                         Instant.now().toString(),
                         "user-service",
-                        "ERROR",
+                        "WARN",
                         "db_spike",
                         requestId,
                         (long) duration,
