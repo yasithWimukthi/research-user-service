@@ -247,8 +247,19 @@ public class UserService {
             }
 
             else if ("degradation".equalsIgnoreCase(failure)) {
-                int delay = 200 + new Random().nextInt(8800);
-                Thread.sleep(delay);
+//                int delay = 200 + new Random().nextInt(8800);
+//                Thread.sleep(delay);
+//
+//                sendLogEvent(new LogEvent(
+//                        Instant.now().toString(),
+//                        "user-service",
+//                        "WARN",
+//                        "degradation",
+//                        requestId,
+//                        (long) delay,
+//                        "Degradation simulated with random delay"
+//                ));
+                Thread.sleep(duration);
 
                 sendLogEvent(new LogEvent(
                         Instant.now().toString(),
@@ -256,8 +267,8 @@ public class UserService {
                         "WARN",
                         "degradation",
                         requestId,
-                        (long) delay,
-                        "Degradation simulated with random delay"
+                        (long) duration,
+                        "Gradual degradation applied"
                 ));
             }
 
